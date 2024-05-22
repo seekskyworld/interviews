@@ -11,7 +11,7 @@ git commit -m "首次提交，添加相关文件"		//暂存区中的更改正式
 git push origin main //推送到远程仓库，如果远程仓库为空 git push -u origin main(master)
 
 git pull origin main//远程仓库拉取最新的变更并自动尝试合并到你当前的分支。git pull 是 git fetch 和 git merge 的组合。
-git commit -m "提交文件"	
+	
 基础指令
 初始化仓库：
 git init
