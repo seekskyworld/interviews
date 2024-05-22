@@ -6,12 +6,17 @@ git init					      //2，首次使用,创建仓库
 
 git add .					   //如果是克隆的仓库，需要cd进入仓库文件夹再add					
 git commit -m "首次提交，添加相关文件"		//暂存区中的更改正式提交到本地仓库
-	ssh-keygen -t rsa -C "xxxxxx@gmail.com" //首次使用，创建SSH KEY，把C:\Users\用户\.ssh\id_rsa.pub这个SSH公钥填进github，settings,sshkey页面
-	git remote set-url origin git@github.com:seekskyworld/interviews.git  //首次使用，通过ssh连接，直接检验本地ssh变量
-git push origin main //推送到远程仓库，如果远程仓库为空 git push -u origin main(master)
+	ssh-keygen -t rsa -C "xxxxxx@gmail.com" //首次使用，创建SSH KEY公匙，把C:\Users\用户\.ssh\id_rsa.pub这个SSH公钥填进github，settings,sshkey页面
+	git remote add origin git@gitee.com:seekandsky/mqttVue3.git //首次使用，通过ssh连接，直接检验本地ssh
+	git remote set-url origin git@github.com:seekskyworld/interviews.git  //更改名为 origin 的远程仓库的URL
+git push origin master //推送到远程仓库，如果远程仓库为空 git push -u origin main(master)
 
-git pull origin main//远程仓库拉取最新的变更并自动尝试合并到你当前的分支。git pull 是 git fetch 和 git merge 的组合。
-	
+git pull origin master//远程仓库拉取最新的变更并自动尝试合并到你当前的分支。git pull 是 git fetch 和 git merge 的组合。
+
+
+
+
+
 基础指令
 初始化仓库：
 git init
