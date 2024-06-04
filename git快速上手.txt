@@ -1,12 +1,20 @@
 快速上手，本地没有git仓库。就创建
 git clone https://github.com/seekskyworld/interviews.git//1，首次使用,把github上面的仓库克隆到本地
 git init					      //2，首次使用,创建仓库
+<<<<<<< HEAD
+=======
 
 git add .					   //如果是克隆的仓库，需要cd进入仓库文件夹再add					
 git commit -m "首次提交，添加相关文件"		//暂存区中的更改正式提交到本地仓库
-	ssh-keygen -t rsa -C "xxxxxx@gmail.com" //首次使用，创建SSH KEY，把C:\Users\用户\.ssh\id_rsa.pub这个SSH公钥填进github，settings,sshkey页面
-	git remote set-url origin git@github.com:seekskyworld/interviews.git  //首次使用，通过ssh连接，直接检验本地ssh变量
-git push origin main //推送到远程仓库，如果远程仓库为空 git push -u origin main(master)
+	ssh-keygen -t rsa -C "xxxxxx@gmail.com" //首次使用，创建SSH KEY公匙，把C:\Users\用户\.ssh\id_rsa.pub这个SSH公钥填进github，settings,sshkey页面
+	git remote add origin git@gitee.com:seekandsky/mqttVue3.git //首次使用，通过ssh连接，直接检验本地ssh
+	git remote set-url origin git@github.com:seekskyworld/interviews.git  //更改名为 origin 的远程仓库的URL
+git push origin master //推送到远程仓库，如果远程仓库为空 git push -u origin main(master)
+
+git pull origin master//远程仓库拉取最新的变更并自动尝试合并到你当前的分支。git pull 是 git fetch 和 git merge 的组合。
+
+
+
 
 
 基础指令
@@ -32,8 +40,9 @@ git commit -m "commit message"
 
 分支管理
 查看所有分支：
-git branch
+git branch -a/-r（只查看远程）
 显示本地所有分支。
+git branch -a
 
 创建新分支：
 git branch [branch-name]
@@ -76,4 +85,82 @@ git restore --staged [file]
 撤销最近的提交：
 git reset --hard HEAD^
 将HEAD指针指回前一个提交，并撤销之后的所有更改。
+>>>>>>> df369b499c9eb4e7c6638101ae9be44445278789
 
+git add .					   //如果是克隆的仓库，需要cd进入仓库文件夹再add					
+git commit -m "首次提交，添加相关文件"		//暂存区中的更改正式提交到本地仓库
+	ssh-keygen -t rsa -C "xxxxxx@gmail.com" //首次使用，创建SSH KEY，把C:\Users\用户\.ssh\id_rsa.pub这个SSH公钥填进github，settings,sshkey页面
+	git remote set-url origin git@github.com:seekskyworld/interviews.git  //首次使用，通过ssh连接，直接检验本地ssh变量
+git push origin master //推送到远程仓库，如果远程仓库为空 git push -u origin main或者master
+
+git pull origin master//从远程仓库拉取master分支最新提交，git pull 是 git fetch 和 git merge 的组合。这个命令会从指定的远程分支拉取最新的变更并自动尝试合并到你当前的master分支。
+
+
+基础指令
+初始化仓库：
+git init
+这个命令会在当前目录创建一个新的 Git 仓库。
+
+克隆仓库：
+git clone [url]
+通过 URL 克隆远程仓库到本地目录。
+
+查看状态：
+git status
+显示工作目录和暂存区的状态。
+
+添加文件到暂存区：
+git add [file]
+把文件添加到暂存区，准备进行提交。使用 git add . 可以添加当前目录下的所有更改。
+
+提交更改：
+git commit -m "commit message"
+把暂存区的更改提交到仓库历史中。每次提交都需要一个消息，描述你做了哪些更改。
+
+分支管理
+查看所有本地和远程所有分支：
+git branch -a （单独查看远程-r）
+显示本地分支。
+git branch  
+
+创建新分支：
+git branch [branch-name]
+
+切换分支：
+git checkout [branch-name]
+也可以使用 git switch [branch-name] 在较新版本的 Git 中。
+
+合并分支：
+git merge [branch-name]
+将指定分支的更改合并到当前分支。
+
+删除分支：
+git branch -d [branch-name]
+
+远程操作
+查看远程仓库：
+git remote -v
+显示所有远程仓库。
+
+添加远程仓库：
+git remote add [shortname] [url]
+
+推送更改到远程仓库：
+git push [remote-name] [branch-name]
+
+从远程仓库拉取更改：
+git pull [remote-name] [branch-name]
+
+拉取远程仓库的所有更改但不自动合并：
+git fetch [remote-name]
+
+撤销更改
+撤销工作目录中的更改：
+git restore [file]
+
+撤销已经暂存的更改：
+git restore --staged [file]
+
+撤销最近的提交：
+git reset --hard HEAD^
+将HEAD指针指回前一个提交，并撤销之后的所有更改。
