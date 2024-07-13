@@ -269,6 +269,15 @@ StringBuilder的主要方法如下：
 - **charAt(int index)**：返回指定索引处的字符。
 - **toString()**：返回字符串缓冲区中的字符串。
 
+**7. 转换成String类型**
+
+```java
+StringBuilder result = new StringBuilder();
+result.toString().trim(); // 将StringBuilder转换为字符串，并去除首尾空格
+```
+
+
+
 ## String字符串转换成int，char数组等方法
 
 **1. String转换成int**
