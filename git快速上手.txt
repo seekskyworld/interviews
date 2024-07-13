@@ -1,5 +1,5 @@
 快速上手，本地没有git仓库。就创建
-git clone https://github.com/seekskyworld/interviews.git//1，首次使用,把github上面的仓库克隆到本地
+git clone -b master https://github.com/seekskyworld/interviews.git//1，首次使用,把github上面的仓库克隆到本地
 git init					      //2，首次使用,创建仓库
 <<<<<<< HEAD
 =======
