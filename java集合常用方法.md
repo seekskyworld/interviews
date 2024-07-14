@@ -431,3 +431,164 @@ content_copy
 - 是否允许重复元素？
 - 是否需要线程安全？
 - jména操作 (查找、插入、删除) 的频率？
+
+
+
+## 单列集合，双列集合，数组，零散数据不同的stream流获取方法
+
+单列集合 (Collection)
+
+```java
+//直接调用 stream() 方法：
+List<String> list = new ArrayList<>();
+Stream<String> stream = list.stream(); 
+
+```
+
+双列集合 (Map)
+
+```java
+//通过 keySet()、values()、entrySet() 获取键、值、键值对的集合，再调用 stream() 方法：
+Map<String, Integer> map = new HashMap<>();
+Stream<String> keyStream = map.keySet().stream();
+Stream<Integer> valueStream = map.values().stream();
+Stream<Map.Entry<String, Integer>> entryStream = map.entrySet().stream();
+
+```
+
+数组
+
+```java
+//使用 Arrays 类的静态方法 stream()：
+String[] array = {"a", "b", "c"};
+Stream<String> stream = Arrays.stream(array);
+
+```
+
+零散数据
+
+```java
+//使用 Stream 接口的静态方法 of()：设计初衷是处理任意数量的单个对象，而不是专门处理数组。
+Stream<String> stream = Stream.of("x", "y", "z");
+//不能获取数组，比如 int[] array = {1, 2, 3};
+//Stream.of(array).forEach(s-> System.out.println(s));
+//打印的是[I@41629346，因为将整个数组作为一个元素处理了，如果是引用类型数组比如String[]就可以，但不建议
+```
+
+steam流常用的处理数据的方法
+
+```java
+Stream 流提供了一系列强大的方法来处理数据，下面是一些常用的操作：
+
+//中间操作 (Intermediate Operations)
+1. 筛选与切片
+filter(Predicate predicate)：过滤元素，只保留满足给定条件的元素。
+distinct()：去除重复元素。
+limit(long maxSize)：限制 Stream 中元素的最大数量。
+skip(long n)：跳过 Stream 中的前 n 个元素。
+2. 映射
+concat(Stream<? extends T> a, Stream<? extends T> b):接收两个 Stream，类型可以相同，也可以是父子关系,返回一个新的 Stream，包含了两个输入 Stream 中的所有元素。	
+map(Function mapper)：将 Stream 中的每个元素转换为另一个元素。
+//mapToInt()、mapToDouble()、mapToLong()和.toArray()结合使用
+flatMap(Function mapper)：将 Stream 中的每个元素转换为一个 Stream，然后将这些 Stream 合并成一个 Stream。
+peek(Consumer action)：对 Stream 中的每个元素执行给定的操作，主要用于调试。
+3. 排序
+sorted()：对 Stream 中的元素进行自然排序。
+sorted(Comparator comparator)：使用指定的 Comparator 对 Stream 中的元素进行排序。
+4. 其他
+takeWhile(Predicate predicate)：从 Stream 中获取元素，直到遇到不满足给定条件的元素为止。
+dropWhile(Predicate predicate)：丢弃 Stream 中的前一部分元素，直到遇到满足给定条件的元素为止。
+    
+//concat示例
+Stream<String> stream1 = Stream.of("a", "b", "c");
+Stream<String> stream2 = Stream.of("d", "e", "f");
+Stream<String> combinedStream = Stream.concat(stream1, stream2);
+combinedStream.forEach(System.out::println); // 输出 a b c d e f，第一个输入 Stream 的元素在前，第二个输入 Stream 的元素在后。
+
+//惰性求值： 中间操作不会立即执行，而是会形成一个操作管道。只有当遇到终止操作时，才会触发整个管道的执行。
+//无状态： 中间操作不会修改原始 Stream，而是返回一个新的 Stream。
+//链式调用： 中间操作可以链式调用，形成复杂的处理流程。
+    
+//终止操作 (Terminal Operations)
+1. 匹配操作
+anyMatch(Predicate predicate)：判断 Stream 中是否有元素满足给定条件。
+allMatch(Predicate predicate)：判断 Stream 中是否所有元素都满足给定条件。
+noneMatch(Predicate predicate)：判断 Stream 中是否没有元素满足给定条件。
+2. 查找操作
+findFirst()：返回 Stream 中的第一个元素，如果 Stream 为空则返回 Optional.empty()。
+findAny()：返回 Stream 中的任意一个元素，如果 Stream 为空则返回 Optional.empty()。
+3. 归约操作
+reduce(T identity, BinaryOperator<T> accumulator)：从一个初始值开始，将 Stream 中的元素逐个与累加器函数的结果进行累积，最终得到一个值。
+reduce(BinaryOperator<T> accumulator)：与上面的方法类似，但没有初始值，如果 Stream 为空则返回 Optional.empty()。
+collect(Collector collector)：使用 Collector 将 Stream 中的元素收集到一个结果容器中，例如 List、Set、Map 等。
+ //.collect(Collectors.toList()),Collectors.toSet(),.toMap(),依次为lsit和set和map，
+// 和.toMap()不同，.groupingBy()将相同组的元素收集到一个 List 中
+//Collectors.joining()：将 Stream 中的字符串元素连接成一个字符串。
+//Collectors.counting()：计算 Stream 中的元素个数，
+4. 迭代操作
+forEach(Consumer action)：对 Stream 中的每个元素执行给定的操作。
+forEachOrdered(Consumer action)：与 forEach 类似，但保证按照元素的 encounter order 执行操作。
+5. 数值操作
+count()：返回 Stream 中的元素个数。
+max(Comparator comparator)：返回 Stream 中的最大值，如果 Stream 为空则返回 Optional.empty()。
+min(Comparator comparator)：返回 Stream 中的最小值，如果 Stream 为空则返回 Optional.empty()。
+sum()：返回 Stream 中所有元素的和（仅适用于数值类型的 Stream）。
+average()：返回 Stream 中所有元素的平均值（仅适用于数值类型的 Stream）。
+6. 其他操作
+toArray()：将 Stream 中的元素收集到一个数组中。
+```
+
+```java
+示例
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+
+// 筛选出偶数，乘以2，去重，求和
+int sum = numbers.stream()
+    .filter(n -> n % 2 == 0)
+    .map(n -> n * 2)
+    .distinct()
+    .reduce(0, Integer::sum);
+System.out.println(sum); // 输出 12
+
+// 筛选中文第二个字符为无，长度为3的
+//对于中文字符串，一个中文字符通常占用两个字符位置，因此 charAt(1) 获取到的可能不是您期望的字符。如果需要处理中文字符串，建议使用 codePointAt(1) 获取字符的 Unicode 编码点。
+List<String> list = new ArrayList<>();
+        Collections.addAll(list,"张无忌","晓无","周芷若","张三丰","张铁");
+        list.stream().filter(name -> name.length() >= 2 && name.codePointAt(1) == '无').filter(name -> name.length()==3).forEach(data -> System.out.println(data));// 输出 张无忌
+
+//collect示例
+List<String> list = new ArrayList<>();
+Collections.addAll(list,"zhangsan,23","lisi,24","wangwu,25");
+Map<String, String> map = list.stream().filter(data -> 24 <= Integer.parseInt(data.split(",")[1])).collect(Collectors.toMap(data -> data.split(",")[0], data -> data.split(",")[1]));//键值对一一对应，输出 {lisi=[24], wangwu=[25]}
+
+List<String> list = new ArrayList<>();
+        Collections.addAll(list,"zhangsan,23","lisi,24","wangwu,25","lisi,26");
+        Map<String, List<String>> collect = list.stream()
+                .filter(data -> 24 <= Integer.parseInt(data.split(",")[1]))
+                .collect(Collectors.groupingBy(
+                        data -> data.split(",")[0],  // 提取姓名作为键
+                        Collectors.mapping(           // 使用 mapping 收集器
+                                data -> data.split(",")[1], // 提取年龄
+                                Collectors.toList()       // 收集到 List 中
+                        )
+                ));			//重复的值放进集合， 输出 {lisi=[24, 26], wangwu=[25]}
+
+//现在有两个ArrayList集合,分别存储6名男演员的名字和年龄以及6名女演员的名字和年龄。姓名和年龄中间用逗号隔开。
+        // 比如：张三，23    要求完成如下的操作：
+        // 1,男演员只要名字为3个字的前两人
+        // 2,女演员只要姓杨的，并且不要第一个
+        // 3.把过滤后的男演员姓名和女演员姓名合并到一起
+        // 4,将上一步的演员姓名封装成Actor对象。
+        // 5,将所有的演员对象都保存到List集合中。
+        // 备注:演员类Actor,属性有: name, age
+        List<String> list1 = new ArrayList<>();
+        Collections.addAll(list1,"蔡坤坤,24","叶齁咸,23","刘不甜,22","吴签,24","谷嘉,30","肖梁梁,27");
+        List<String> list2 = new ArrayList<>();
+        Collections.addAll(list2,"赵小颖,35","杨颖,36","高元元,43","张天天,31","刘诗,35","杨小幂,33");
+        Stream<String> limit = list1.stream().filter(s -> s.split(",")[0].length() == 3).limit(2);
+        Stream<String> skip = list2.stream().filter(s -> (s.split(",")[0]).startsWith("杨")).skip(1);        //中英文逗号和startsWith问题
+        List<Actor> collect = Stream.concat(limit, skip).map(s -> new Actor(s.split(",")[0], Integer.parseInt(s.split(",")[1]))).collect(Collectors.toList());
+        System.out.println(collect);
+
+```
+
