@@ -592,3 +592,101 @@ List<String> list = new ArrayList<>();
 
 ```
 
+## 基础类型和包装
+
+| 基础类型 | 包装类（首字母大写） |
+| -------- | -------------------- |
+| byte     | Byte                 |
+| short    | Short                |
+| int      | Integer              |
+| long     | Long                 |
+| float    | Float                |
+| double   | Double               |
+| char     | Character            |
+| boolean  | Boolean              |
+
+### [自动装箱与拆箱了解吗？原理是什么？](https://javaguide.cn/java/basis/java-basic-questions-01.html#自动装箱与拆箱了解吗-原理是什么)
+
+**什么是自动拆装箱？**
+
+- **装箱**：将基本类型用它们对应的引用类型包装起来；
+- **拆箱**：将包装类型转换为基本数据类型；
+
+从字节码中，我们发现装箱其实就是调用了 包装类的`valueOf()`方法，拆箱其实就是调用了 `xxxValue()`方法。
+
+因此，
+
+- `Integer i = 10` 等价于 `Integer i = Integer.valueOf(10)`
+- `int n = i` 等价于 `int n = i.intValue()`;
+
+注意：如果频繁拆装箱的话，也会严重影响系统的性能。我们应该尽量避免不必要的拆装箱操作。
+
+### **BigInteger:**
+
+- **算术运算：**
+  - `add(BigInteger val)`: 加法
+  - `subtract(BigInteger val)`: 减法
+  - `multiply(BigInteger val)`: 乘法
+  - `divide(BigInteger val)`: 除法
+  - `remainder(BigInteger val)`: 取余
+  - `pow(int exponent)`: 幂运算
+  - `negate()`: 取相反数
+  - `abs()`: 取绝对值
+- **比较：**
+  - `compareTo(BigInteger val)`: 比较大小 (-1, 0, 1)
+  - `equals(Object x)`: 判断是否相等
+  - `min(BigInteger val)`: 取较小值
+  - `max(BigInteger val)`: 取较大值
+- **其他：**
+  - `valueOf(long val)`: 将 long 值转换为 BigInteger
+  - `toString()`: 转换为字符串
+
+### **BigDecimal:**
+
+- **算术运算：**
+
+  - `add(BigDecimal val)`: 加法
+  - `subtract(BigDecimal val)`: 减法
+  - `multiply(BigDecimal val)`: 乘法
+  - `divide(BigDecimal val, int roundingMode)`: 除法 (需要指定舍入模式)
+  - `remainder(BigDecimal val)`: 取余
+  - `pow(int n)`: 幂运算
+  - `negate()`: 取相反数
+  - `abs()`: 取绝对值
+
+- **比较：**
+
+  - `compareTo(BigDecimal val)`: 比较大小 (-1, 0, 1)
+  - `equals(Object x)`: 判断是否相等
+  - `min(BigDecimal val)`: 取较小值
+  - `max(BigDecimal val)`: 取较大值
+
+- **舍入和格式化：**
+
+  - `setScale(int newScale, int roundingMode)`: 设置小数位数和舍入模式
+  - `round(MathContext mc)`: 按照指定 MathContext 舍入
+  - `toString()`: 转换为字符串
+  - `toPlainString()`: 转换为不带指数的字符串
+
+- **其他：**
+
+  - `valueOf(double val)`: 将 double 值转换为 BigDecimal (注意精度问题)
+  - `valueOf(long val)`: 将 long 值转换为 BigDecimal
+  - `valueOf(long unscaledVal, int scale)`: 将 unscaledVal / 10^scale 转换为 BigDecimal
+
+  ```java
+  //示例
+  BigInteger a = BigInteger.valueOf(123456789);
+  BigInteger b = BigInteger.valueOf(987654321);
+  BigInteger c = a.multiply(b); // 乘法
+  
+  BigDecimal x = BigDecimal.valueOf(3.14159);
+  BigDecimal y = BigDecimal.valueOf(2.71828);
+  BigDecimal z = x.divide(y, 5, RoundingMode.HALF_UP); // 除法，保留5位小数，四舍五入
+  
+  ```
+
+  **注意：**
+
+  - `BigDecimal` 的除法需要指定舍入模式，以避免无限循环小数的情况。
+  - 由于浮点数精度问题，直接使用 `BigDecimal.valueOf(double val)` 可能会导致精度损失，建议使用字符串构造函数 `new BigDecimal("3.14159")`。
